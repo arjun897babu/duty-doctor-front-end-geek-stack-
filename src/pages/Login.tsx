@@ -3,8 +3,10 @@ import BackGroundImage from "../components/BackGroundImage"
 import { SubmitButton } from "../components/Button"
 import Input from "../components/Input"
 import { dutyDoctorPath } from "../constants/endponts"
+import { useState } from "react"
 
 const Login = () => {
+        const [loading, setLoading] = useState(false);
     
     return (
         <BackGroundImage>
@@ -17,7 +19,7 @@ const Login = () => {
                     to get OTP</h3>
                 <form className="flex flex-col gap-5 mt-8" >
                     <Input field="email" type="email" placeHolder="email"/>
-                    <SubmitButton text="Get OTP" />
+                    <SubmitButton text="Get OTP" loading={loading}/>
                 </form>
 
                 <p className="text-sm font-normal leading-4 text-left mt-3 mb-4">

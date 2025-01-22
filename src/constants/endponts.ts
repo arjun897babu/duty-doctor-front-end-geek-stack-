@@ -1,16 +1,16 @@
 export const apiEndPoint = Object.freeze({
-    login: '/login',
-    signUp: '/signup',
-    getProfile: '/:userId',
-    logout: '/logout',
-    sendMail: '/send',
-    verifyMail: '/verify',
+    login: '/doctor/login',
+    register: '/doctor/register',
+    getProfile: '/doctor/:userId',
+    logout: '/doctor/logout',
+    sendMail: '/mail/send',
+    verifyMail: '/mail/verify',
 });
 
 export const dutyDoctorPath = Object.freeze({
-    home:'/',
-    login:'/login',
-    register:'/register',
-    register2:'/register2',
-    verify:'/verify',
+    home: '/',
+    login: '/login',
+    register: '/register',
+    register2: '/register2',
+    verify: '/verify',
 })

@@ -5,8 +5,3 @@ export const serverInstance = axios.create({
     baseURL: envVariables.baseURL,
     timeout: 6 * 1000,
 });
-
-export const authInstance = axios.create({
-    baseURL: envVariables.baseURL,
-    timeout: 6 * 1000,
-});
