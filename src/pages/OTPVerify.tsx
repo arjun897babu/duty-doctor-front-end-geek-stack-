@@ -1,6 +1,6 @@
 import BackGroundImage from "../components/BackGroundImage"
 import { SubmitButton } from "../components/Button"
-import { OTPInuput } from "../components/input"
+import { OTPInuput } from "../components/Input"
 
 const OTPVerify = () => {
     return (

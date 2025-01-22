@@ -10,6 +10,7 @@ export const apiEndPoint = Object.freeze({
 export const dutyDoctorPath = Object.freeze({
     home:'/',
     login:'/login',
-    register:'/signup',
+    register:'/register',
+    register2:'/register2',
     verify:'/verify',
 })

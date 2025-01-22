@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import BackGroundImage from "../components/BackGroundImage"
 import { SubmitButton } from "../components/Button"
-import Input from "../components/input"
+import Input from "../components/Input"
 import { dutyDoctorPath } from "../constants/endponts"
 
 const Login = () => {
@@ -16,7 +16,7 @@ const Login = () => {
                 <h3 className="text-left font-bold sm:text-2xl sm:w-[300px] mb-2">Enter your email address
                     to get OTP</h3>
                 <form className="flex flex-col gap-5 mt-8" >
-                    <Input field="email" type="email" />
+                    <Input field="email" type="email" placeHolder="email"/>
                     <SubmitButton text="Get OTP" />
                 </form>
 
