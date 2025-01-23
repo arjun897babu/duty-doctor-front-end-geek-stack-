@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { generateInvalid, generateIsRequired } from './helper'
 
-const emailSchema = z.object({
+export const emailSchema = z.object({
     email: z
         .string()
         .nonempty(generateIsRequired("email"))

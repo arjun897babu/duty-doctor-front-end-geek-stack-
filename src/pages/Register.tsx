@@ -6,13 +6,21 @@ import { apiEndPoint, dutyDoctorPath } from "../constants/endponts"
 import { UseZodForm } from "../customhooks/UseZodForm"
 import { registerSchema } from "../utils/zod-schema"
 import { z } from "zod"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { serverInstance } from "../service/api"
+import UseApiErrorHandler from "../customhooks/UseApiErrorHanlder"
+import UseDocState from "../customhooks/UseDocState"
 
 const initialValue: z.infer<typeof registerSchema> = { email: '', firstName: "", lastName: '' }
 const Register = () => {
     const navigate = useNavigate()
-    const { handleSubmit, register, formState: { errors } } = UseZodForm(registerSchema, initialValue);
+    const { handleSubmit, register, setError,formState: { errors } } = UseZodForm(registerSchema, initialValue);
+    function setErrorCB(key: string, message: string) {
+        setError(key as keyof z.infer<typeof registerSchema>, { message })
+    };
+    const { setDoctorState, doctorState } = UseDocState()
+
+    const handleApiError = UseApiErrorHandler(setErrorCB);
     const [loading, setLoading] = useState(false);
     async function getOTP(data: z.infer<typeof registerSchema>) {
         try {
@@ -20,11 +28,17 @@ const Register = () => {
             await serverInstance.post(apiEndPoint.sendMail, data);
             navigate(dutyDoctorPath.verify, { state: { data }, replace: true });
         } catch (error) {
-
+            handleApiError(error)
         } finally {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (doctorState.isAuthed) {
+            navigate(dutyDoctorPath.home, { replace: true })
+        }
+    }, [doctorState]);
 
     return (
         <>

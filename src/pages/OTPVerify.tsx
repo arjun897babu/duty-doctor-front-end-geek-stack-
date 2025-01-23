@@ -8,16 +8,32 @@ import { OTPSchema } from "../utils/zod-schema";
 import { z } from "zod";
 import { apiEndPoint, dutyDoctorPath } from "../constants/endponts";
 import { serverInstance } from "../service/api";
+import UseApiErrorHandler from "../customhooks/UseApiErrorHanlder";
+import { IDoctorAuthResponse } from "../constants/types";
+import UseDocState from "../customhooks/UseDocState";
 const initialValue: z.infer<typeof OTPSchema> = { email: '', otp: "" }
 const OTPVerify = () => {
     const locationState = useLocation();
     const navigate = useNavigate();
-    const { setValue, handleSubmit, formState: { errors } } = UseZodForm(OTPSchema, initialValue)
+    const { setValue, handleSubmit, setError, formState: { errors } } = UseZodForm(OTPSchema, initialValue);
+    function setErrorCB(key: string, message: string) {
+        setError(key as keyof z.infer<typeof OTPSchema>, { message })
+    };
+
+    const handleApiError = UseApiErrorHandler(setErrorCB);
+    const { setDoctorState, doctorState } = UseDocState()
+
     const [loading, setLoading] = useState(false);
 
     const trackOTp = (OTP: string) => {
         setValue('otp', OTP)
     };
+
+    useEffect(() => {
+        if (doctorState.isAuthed) {
+            navigate(dutyDoctorPath.home, { replace: true })
+        }
+    }, [doctorState]);
 
     useEffect(() => {
         const data = locationState?.state?.data || null
@@ -33,15 +49,37 @@ const OTPVerify = () => {
             locationState.state = null
         }
 
+    }, []);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            navigate(dutyDoctorPath.login, {
+                replace: true,
+                state: { message: 'Please try again.' },
+            });
+        }, 2 * 60 * 1000);
+
+        return () => {
+            clearTimeout(timer);
+            locationState.state = null;
+        };
     }, [])
 
     async function verifyOTP(data: z.infer<typeof OTPSchema>) {
         try {
             setLoading(true)
-            await serverInstance.post(apiEndPoint.verifyMail, data);
-            navigate(dutyDoctorPath.register2, { replace: true, state: { data: locationState.state.data } })
-        } catch (error) {
+            const state = locationState?.state?.data || null;
+            let endpoint = state.login ? apiEndPoint.login : apiEndPoint.verifyMail
+            let navigationPath = state.login ? dutyDoctorPath.home : dutyDoctorPath.register2
 
+            const response: IDoctorAuthResponse = (await serverInstance.post(endpoint, data)).data;
+            if (state.login) {
+                setDoctorState((prev) => ({ ...prev, isAuthed: true, token: response.data.token }));
+            }
+
+            navigate(navigationPath, { replace: true, state: { data: locationState.state.data } })
+        } catch (error) {
+            handleApiError(error)
         } finally {
             setLoading(false)
         }

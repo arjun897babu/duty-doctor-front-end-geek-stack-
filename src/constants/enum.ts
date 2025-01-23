@@ -11,4 +11,14 @@ export const selectListValues: Record<string, string[]> = Object.freeze({
     completion: ['Yes', 'No'],
     year: ['1st year', '2nd year', '3rd year', '4th year', '5th year', '6th year', '7th year']
 })
+export enum ResponseStatus {
+    SUCCESS = 'Success',
+    ERROR = 'Error',
+}
+export enum DoctorDegree {
+    MBBS = 'MBBS',
+    PG = 'PG',
+    SUPER_SPECIALITY = "Super Speciality",
+    FELLOWSHIP = 'Fellowship'
+}
 

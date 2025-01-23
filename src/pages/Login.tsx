@@ -1,13 +1,47 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import BackGroundImage from "../components/BackGroundImage"
 import { SubmitButton } from "../components/Button"
 import Input from "../components/Input"
-import { dutyDoctorPath } from "../constants/endponts"
-import { useState } from "react"
+import { apiEndPoint, dutyDoctorPath } from "../constants/endponts"
+import { useEffect, useState } from "react"
+import { UseZodForm } from "../customhooks/UseZodForm"
+import { emailSchema } from "../utils/zod-schema"
+import { z } from "zod"
+import { serverInstance } from "../service/api"
+import UseApiErrorHandler from "../customhooks/UseApiErrorHanlder"
+import UseDocState from "../customhooks/UseDocState"
 
 const Login = () => {
-        const [loading, setLoading] = useState(false);
-    
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
+    const { register, handleSubmit, setError, formState: { errors } } = UseZodForm(emailSchema, { email: '' });
+
+    function setErrorCB(key: string, message: string) {
+        setError(key as keyof z.infer<typeof emailSchema>, { message })
+    };
+    const { setDoctorState, doctorState } = UseDocState()
+
+    const handleApiError = UseApiErrorHandler(setErrorCB);
+
+    async function getOTP(data: z.infer<typeof emailSchema>) {
+        try {
+            setLoading(true)
+            await serverInstance.post(apiEndPoint.getOTP, data)
+            navigate(dutyDoctorPath.verify, { replace: true, state: { data: { email: data.email, login: true } } })
+        } catch (error) {
+            handleApiError(error)
+        } finally {
+            setLoading(false)
+
+        }
+    }
+
+    useEffect(() => {
+        if (doctorState.isAuthed) {
+            navigate(dutyDoctorPath.home, { replace: true })
+        }
+    }, [doctorState]);
+
     return (
         <BackGroundImage>
             <div className="mb-10">
@@ -17,9 +51,9 @@ const Login = () => {
             <div>
                 <h3 className="text-left font-bold sm:text-2xl sm:w-[300px] mb-2">Enter your email address
                     to get OTP</h3>
-                <form className="flex flex-col gap-5 mt-8" >
-                    <Input field="email" type="email" placeHolder="email"/>
-                    <SubmitButton text="Get OTP" loading={loading}/>
+                <form className="flex flex-col gap-5 mt-8" onSubmit={handleSubmit(getOTP)} >
+                    <Input field="email" type="email" placeHolder="email" {...register('email')} error={errors?.email?.message} />
+                    <SubmitButton text="Get OTP" loading={loading} />
                 </form>
 
                 <p className="text-sm font-normal leading-4 text-left mt-3 mb-4">

@@ -1,11 +1,35 @@
 import { IoIosNotifications } from 'react-icons/io'
 import duty_doctor_log from '../assets/duty-doctor.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { dutyDoctorPath } from '../constants/endponts'
 import { IoPersonSharp } from 'react-icons/io5'
 import BlogCard from '../components/BlogCard'
 import ProfileSummary from '../components/ProfileSummary'
+import { useEffect, useState } from 'react'
+import UseDocState from '../customhooks/UseDocState'
+
 const Home = () => {
+
+    const { doctorState } = UseDocState();
+    const navigate = useNavigate();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        if (!doctorState.isAuthed) {
+            navigate(dutyDoctorPath.login, { replace: true })
+        }
+    }, [doctorState]);
+
+
 
     return (
         <>
@@ -13,7 +37,7 @@ const Home = () => {
                 <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content flex flex-col">
                     {/* Navbar */}
-                    <div className="navbar bg-base-100 w-full md:p-5 sm:justify-between">
+                    <div className={`navbar  w-full md:p-5  sm:justify-between fixed z-50  ${isScrolled ? 'glass bg-transparent' : 'bg-base-100'}`}>
                         <div className="flex-none sm:hidden">
                             <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost absolute left-2 top-2 z-10 ">
                                 <svg
@@ -72,7 +96,7 @@ const Home = () => {
                         </div>
                     </div>
                     {/* page contents*/}
-                    <div className="grid grid-cols-[1fr_2fr_1fr] gap-2 justify-items-center bg-base-100 ">
+                    <div className="pt-[calc(7rem+10px)] grid grid-cols-[1fr_2fr_1fr] gap-2 justify-items-center bg-base-100 ">
                         {/* left  */}
                         <div className="hidden md:block">
                             <ProfileSummary />

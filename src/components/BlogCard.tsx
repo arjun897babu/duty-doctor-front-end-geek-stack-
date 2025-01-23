@@ -1,4 +1,4 @@
-import { blogData } from '../constants/BlogData';
+import { blogData } from '../constants/blogData';
 
 const BlogCard = () => {
     return (

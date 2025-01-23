@@ -8,7 +8,7 @@ const SubmitButton: FC<{ text: string, loading: boolean }> = ({ text, loading })
                 {
                     !loading ?
                         text :
-                        <span className="loading loading-spinner loading-lg"></span>
+                        <span className="loading loading-spinner loading-sm"></span>
                 }
             </button>
         </>
@@ -23,7 +23,7 @@ const ActionButton: FC<{ text: string, loading?: boolean }> = ({ text, loading }
                 {
                     !loading ?
                         text :
-                        <span className="loading loading-spinner loading-lg"></span>
+                        <span className="loading loading-spinner loading-sm"></span>
                 }
             </button>
         </>

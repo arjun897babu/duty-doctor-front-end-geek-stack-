@@ -9,13 +9,21 @@ import { apiEndPoint, dutyDoctorPath } from "../constants/endponts"
 import { registerSchema2 } from "../utils/zod-schema"
 import { z } from "zod"
 import { serverInstance } from "../service/api"
+import UseApiErrorHandler from "../customhooks/UseApiErrorHanlder"
+import UseDocState from "../customhooks/UseDocState"
+import { IDoctorAuthResponse } from "../constants/types"
 
 const initialValue: z.infer<typeof registerSchema2> = { completion: '', country: '', instituteName: '', degree: '', email: '', firstName: '', lastName: '' }
 const Register2 = () => {
     const [loading, setLoading] = useState(false);
     const locationState = useLocation();
     const navigate = useNavigate();
-    const { register, watch, setValue, handleSubmit, formState: { errors } } = UseZodForm(registerSchema2, initialValue)
+    const { register, watch, setValue, setError, handleSubmit, formState: { errors } } = UseZodForm(registerSchema2, initialValue);
+    function setErrorCB(key: string, message: string) {
+        setError(key as keyof z.infer<typeof registerSchema2>, { message })
+    };
+    const { setDoctorState, doctorState } = UseDocState()
+    const handleApiError = UseApiErrorHandler(setErrorCB);
 
     useEffect(() => {
         const data = locationState?.state?.data || null
@@ -32,14 +40,22 @@ const Register2 = () => {
             }
         }
     }, [])
- 
+
+    useEffect(() => {
+        if (doctorState.isAuthed) {
+            navigate(dutyDoctorPath.home, { replace: true })
+        }
+    }, [doctorState]);
+
     async function registerAccount(data: z.infer<typeof registerSchema2>) {
         try {
             setLoading(true)
-            const response = (await serverInstance.post(apiEndPoint.register, data)).data
+            const response: IDoctorAuthResponse = await (await serverInstance.post(apiEndPoint.register, data)).data
+
+            setDoctorState((prev) => ({ ...prev, isAuthed: true, token: response.data.token }));
             navigate(dutyDoctorPath.home, { replace: true })
         } catch (error) {
-
+            handleApiError(error)
         } finally {
             setLoading(false)
 
@@ -64,7 +80,7 @@ const Register2 = () => {
                             <Input field="instituteName" placeHolder="Institute name" type="text"  {...register('instituteName')} error={errors.instituteName?.message} />
                             {/* conditional fields */}
 
-                            {(watch('degree') === 'Super Speciality' || watch('degree') === 'PG')  &&
+                            {(watch('degree') === 'Super Speciality' || watch('degree') === 'PG') &&
 
                                 <List field="speciality" placeHolder="speciality" {...register('speciality')} error={errors.speciality?.message} />
                             }

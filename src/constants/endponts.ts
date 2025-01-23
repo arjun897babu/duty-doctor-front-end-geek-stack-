@@ -1,4 +1,5 @@
 export const apiEndPoint = Object.freeze({
+    getOTP:'/doctor/mail/send',
     login: '/doctor/login',
     register: '/doctor/register',
     getProfile: '/doctor/:userId',
