@@ -17,12 +17,12 @@ const nameSchema = z
     .regex(/^[a-zA-Z]*$/, generateInvalid("name"))
 
 
-const nameSchema2 = (field: string) => {
-    return z
-        .string()
-        .nonempty(generateIsRequired(field))
-        .regex(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/, generateInvalid(field))
-}
+// const nameSchema2 = (field: string) => {
+//     return z
+//         .string()
+//         .nonempty(generateIsRequired(field))
+//         .regex(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/, generateInvalid(field))
+// }
 
 const dropDownValueSchema = (field: string) => {
     return z

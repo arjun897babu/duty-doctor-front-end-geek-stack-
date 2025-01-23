@@ -19,6 +19,7 @@ const Register = () => {
         setError(key as keyof z.infer<typeof registerSchema>, { message })
     };
     const { setDoctorState, doctorState } = UseDocState()
+    console.log(setDoctorState)
 
     const handleApiError = UseApiErrorHandler(setErrorCB);
     const [loading, setLoading] = useState(false);

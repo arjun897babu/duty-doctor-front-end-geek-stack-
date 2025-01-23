@@ -20,7 +20,7 @@ const Login = () => {
         setError(key as keyof z.infer<typeof emailSchema>, { message })
     };
     const { setDoctorState, doctorState } = UseDocState()
-
+    console.log(setDoctorState)
     const handleApiError = UseApiErrorHandler(setErrorCB);
 
     async function getOTP(data: z.infer<typeof emailSchema>) {
