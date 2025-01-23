@@ -7,6 +7,7 @@ import BlogCard from '../components/BlogCard'
 import ProfileSummary from '../components/ProfileSummary'
 import { useEffect, useState } from 'react'
 import UseDocState from '../customhooks/UseDocState'
+import Footer from '../components/Footer'
 
 const Home = () => {
 
@@ -29,7 +30,7 @@ const Home = () => {
         }
     }, [doctorState]);
 
-
+    if (!doctorState.isAuthed) return
 
     return (
         <>
@@ -121,6 +122,7 @@ const Home = () => {
 
                         </div>
                     </div>
+                    <Footer />
                 </div>
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>

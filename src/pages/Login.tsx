@@ -42,6 +42,8 @@ const Login = () => {
         }
     }, [doctorState]);
 
+    if (doctorState.isAuthed) return
+
     return (
         <BackGroundImage>
             <div className="mb-10">
@@ -51,7 +53,7 @@ const Login = () => {
             <div>
                 <h3 className="text-left font-bold sm:text-2xl sm:w-[300px] mb-2">Enter your email address
                     to get OTP</h3>
-                <form className="flex flex-col gap-5 mt-8" onSubmit={handleSubmit(getOTP)} >
+                <form className="flex flex-col gap-6 mt-8" onSubmit={handleSubmit(getOTP)} >
                     <Input field="email" type="email" placeHolder="email" {...register('email')} error={errors?.email?.message} />
                     <SubmitButton text="Get OTP" loading={loading} />
                 </form>

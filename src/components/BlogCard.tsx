@@ -11,7 +11,7 @@ const BlogCard = () => {
                         <div key={key} className="card bg-base-100 shadow-xl">
                             <figure className='h-36 '>
                                 <img
-                                    className='w-full h-full object-cover'
+                                    className='w-full h-full object-fit'
                                     src={image}
                                     alt={title}
                                 />

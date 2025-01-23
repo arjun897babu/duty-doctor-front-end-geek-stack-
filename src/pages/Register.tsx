@@ -40,7 +40,7 @@ const Register = () => {
             navigate(dutyDoctorPath.home, { replace: true })
         }
     }, [doctorState]);
-
+    if (doctorState.isAuthed) return
     return (
         <>
             <BackGroundImage>

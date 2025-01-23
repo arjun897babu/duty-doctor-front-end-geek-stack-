@@ -61,6 +61,7 @@ const Register2 = () => {
 
         }
     }
+    if (doctorState.isAuthed) return
     return (
         <>
             <BackGroundImage>

@@ -7,6 +7,7 @@ const UseApiErrorHandler = (setError?: (key: string, message: string) => void) =
         if (isApiError(er) && setError) {
             for (let key in er.error) {
                 let err = er.error[key];
+                console.log(key,err)
                 setError(key, err)
             }
         }
@@ -14,6 +15,7 @@ const UseApiErrorHandler = (setError?: (key: string, message: string) => void) =
 
     function handleApiError(error: unknown) {
         const er = handleAxiosError(error);
+        
         changeError(er);
     }
 

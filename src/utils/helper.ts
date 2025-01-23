@@ -20,10 +20,11 @@ export function createApiError(
 export function handleAxiosError(error: unknown): ApiError {
     if (error instanceof AxiosError) {
         const { response = undefined } = error;
+        console.log(response?.data)
         return createApiError(
             response?.data.message,
             response?.data.status,
-            response?.data.error,
+            response?.data.err,
         );
     }
     return createApiError();

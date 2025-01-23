@@ -38,7 +38,7 @@ const OTPVerify = () => {
     useEffect(() => {
         const data = locationState?.state?.data || null
         if (!data) {
-            navigate(dutyDoctorPath.register, { replace: true, state: { message: 'something went wrong.please try again' } })
+            navigate(dutyDoctorPath.login, { replace: true, state: { message: 'something went wrong.please try again' } })
             return
         }
 
@@ -84,6 +84,7 @@ const OTPVerify = () => {
             setLoading(false)
         }
     }
+    if (doctorState.isAuthed) return
     return (
         <>
             <BackGroundImage>
@@ -93,7 +94,7 @@ const OTPVerify = () => {
                         Please enter the code we’ve sent to your
                         email dummyemail@gmail.com
                     </span>
-                    <form action="" className="flex flex-col gap-6 mt-6" onSubmit={handleSubmit(verifyOTP)}>
+                    <form action="" className="flex flex-col gap-8 mt-6" onSubmit={handleSubmit(verifyOTP)}>
                         <OTPInuput changeOTP={trackOTp} error={errors?.otp?.message} />
                         <SubmitButton text="Continue" loading={loading} />
                     </form>
