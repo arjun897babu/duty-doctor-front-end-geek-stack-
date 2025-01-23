@@ -8,6 +8,7 @@ import ProfileSummary from '../components/ProfileSummary'
 import { useEffect, useState } from 'react'
 import UseDocState from '../customhooks/UseDocState'
 import Footer from '../components/Footer'
+import SliderFrame from '../components/SliderFrame'
 
 const Home = () => {
 
@@ -97,17 +98,20 @@ const Home = () => {
                         </div>
                     </div>
                     {/* page contents*/}
-                    <div className="pt-[calc(7rem+10px)] grid grid-cols-[1fr_2fr_1fr] gap-2 justify-items-center bg-base-100 ">
+                    <div className="pt-[calc(7rem+10px)] md:grid md:grid-cols-[1fr_2fr_1fr] md:gap-2 md:justify-items-center bg-base-100 ">
                         {/* left  */}
-                        <div className="hidden md:block">
+                        <div className="hidden md:block w-full">
                             <ProfileSummary />
                         </div>
 
                         {/* middle  */}
-                        <div className=" bg-gray-300 px-4 ">Middle Section</div>
+                        <div className="flex flex-col gap-3 px-4 w-full ">
+                            <SliderFrame sliderTitle='Recommended jobs for you' />
+                            <SliderFrame sliderTitle='Dutys' />
+                        </div>
 
                         {/* right  */}
-                        <div className=" flex-col gap-2 hidden md:flex">
+                        <div className=" flex-col gap-2 hidden md:flex w-full">
                             <div className="card-body p-5 bg-white border rounded-xl shadow-xl">
                                 <h2 className="card-title ">Where are you in your job
                                     search journey?</h2>
